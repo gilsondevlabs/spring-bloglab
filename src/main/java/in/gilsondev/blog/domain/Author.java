@@ -19,6 +19,6 @@ public class Author {
     @Column(nullable = false, length = 50)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String email;
 }

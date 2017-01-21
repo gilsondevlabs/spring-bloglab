@@ -30,6 +30,7 @@ Usuário responsável pelo blog, e os posts criados. Ele é composto por:
 ### Considerações
 
  - O *nome* e *sobrenome* devem ter no máximo **50 caracteres**
+ - O *e-mail* deve ter no máximo **60 caracteres**
  - O formato do e-mail **deverá ser validado**
  - Todos os campos são **obrigatórios**
 
