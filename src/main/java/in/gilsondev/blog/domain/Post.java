@@ -23,6 +23,8 @@ public class Post {
 
     @Column(nullable = false, length = 70)
     private String slug;
+
+    @Column(nullable = false)
     private String teaser;
     private String body;
     private LocalDateTime createdAt;
