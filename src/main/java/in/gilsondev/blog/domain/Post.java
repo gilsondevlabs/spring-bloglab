@@ -29,6 +29,8 @@ public class Post {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean status;
