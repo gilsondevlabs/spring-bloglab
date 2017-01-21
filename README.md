@@ -55,7 +55,7 @@ Essa funcionalidade representa os posts do blog em que é composto por:
  - O *título* deve ter no máximo **50 caracteres**
  - O *slug* deve ter no máximo **70 caracteres**
  - O *resumo geral* deve ter no máximo **150 caracteres**
- - O *conteúdo do post* deve ter no máximo **5000 caracteres**
+ - O *conteúdo do post* deve aceitar textos grandes
  - A *data de criação* é registrada ao salvar o post
  - A *data de atualização* é registrado ao atualizar o post
  - Os posts com *status* **inativo**, não devem ser exibidos (remoção lógica)

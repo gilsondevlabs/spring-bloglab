@@ -27,7 +27,7 @@ public class Post {
     @Column(nullable = false, length = 70)
     private String teaser;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
