@@ -1,5 +1,6 @@
 package in.gilsondev.blog.domain;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,6 +25,10 @@ public class AuthorEntityTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    @Before
+    public void setUp() {
+   }
+
     @Test
     public void shouldHaveLombokProperties() {
         Author author = new Author();
@@ -47,7 +52,8 @@ public class AuthorEntityTest {
 
         Author authorPersisted = entityManager.persistFlushFind(author);
 
-        assertThat(authorPersisted.getId()).isEqualTo(1L);
+        assertThat(authorPersisted.getId()).isNotNull();
+        assertThat(authorPersisted.getId()).isNotNegative();
         assertThat(authorPersisted.getFirstName()).isEqualTo(author.getFirstName());
         assertThat(authorPersisted.getLastName()).isEqualTo(author.getLastName());
         assertThat(authorPersisted.getEmail()).isEqualTo(author.getEmail());
@@ -70,6 +76,17 @@ public class AuthorEntityTest {
         author.setFirstName("Author");
         author.setLastName(null);
         author.setEmail("author.test@mail.com");
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
+    }
+
+    @Test
+    public void shouldNotPersistAuthorWithoutEmail() {
+        Author author = new Author();
+        author.setFirstName("Author");
+        author.setLastName("Test");
+        author.setEmail(null);
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
