@@ -311,4 +311,17 @@ public class PostEntityTest {
 
         assertThat(postPersisted.getCreatedAt()).isNotNull();
     }
+
+    @Test
+    public void shouldNotPersistPostWithoutAuthor() {
+        Post post = new Post();
+        post.setTitle("Post Title");
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post content");
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(post);
+    }
 }
