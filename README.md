@@ -61,4 +61,3 @@ Essa funcionalidade representa os posts do blog em que é composto por:
  - Os posts com *status* **inativo**, não devem ser exibidos (remoção lógica)
  - Os posts com *status* **ativo**, devem ser exibidos
  - As *palavras-chave* **não tem limite** e são **opcionais**
- - **Não existe** post sem *autor*
