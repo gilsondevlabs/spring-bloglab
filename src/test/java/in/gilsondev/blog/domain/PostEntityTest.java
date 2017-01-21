@@ -32,6 +32,8 @@ public class PostEntityTest {
     @Autowired
     private TestEntityManager entityManager;
 
+    private DataFactory dataFactory = new DataFactory();
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -106,6 +108,25 @@ public class PostEntityTest {
         Post post = new Post();
         post.setAuthor(authorPersisted);
         post.setTitle(null);
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post Content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setStatus(true);
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        Post postPersisted = entityManager.persistFlushFind(post);
+    }
+
+    @Test
+    public void shouldNotPersistPostWithTitleWithMore50Characters() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle(dataFactory.getRandomChars(51));
         post.setSlug("post-title");
         post.setTeaser("POst resume");
         post.setBody("Post Content");
