@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -121,6 +122,17 @@ public class AuthorEntityTest {
         author.setEmail(dataFactory.getRandomChars(60) + "@mail.com");
 
         exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
+    }
+
+    @Test
+    public void shouldNotPersistAuthorWithInvalidEmail() {
+        Author author = new Author();
+        author.setFirstName("Author");
+        author.setLastName("Test");
+        author.setEmail(dataFactory.getRandomChars(30));
+
+        exception.expect(ConstraintViolationException.class);
         entityManager.persistFlushFind(author);
     }
 }

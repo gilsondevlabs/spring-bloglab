@@ -2,6 +2,7 @@ package in.gilsondev.blog.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 
@@ -19,6 +20,7 @@ public class Author {
     @Column(nullable = false, length = 50)
     private String lastName;
 
+    @Email
     @Column(nullable = false, length = 60)
     private String email;
 }
