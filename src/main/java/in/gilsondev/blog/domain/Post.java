@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 public class Post {
     private Long id;
+    private Author author;
     private String title;
     private String slug;
     private String teaser;

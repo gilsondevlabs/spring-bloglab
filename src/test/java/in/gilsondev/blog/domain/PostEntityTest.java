@@ -1,5 +1,6 @@
 package in.gilsondev.blog.domain;
 
+import in.gilsondev.blog.builder.AuthorBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -24,6 +25,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class PostEntityTest {
     @Test
     public void shouldHaveLombokProperties() {
+        Author authorFake = new AuthorBuilder().build();
+
         // Criando mock para a data e hora atual usando Powermock
         mockStatic(LocalDateTime.class);
         LocalDateTime now = LocalDateTime.now();
@@ -31,6 +34,7 @@ public class PostEntityTest {
 
         Post post = new Post();
         post.setId(1L);
+        post.setAuthor(authorFake);
         post.setTitle("Post Title");
         post.setSlug("post-title");
         post.setTeaser("POst resume");
@@ -41,6 +45,7 @@ public class PostEntityTest {
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         assertThat(post.getId()).isEqualTo(1L);
+        assertThat(post.getAuthor()).isEqualTo(authorFake);
         assertThat(post.getTitle()).isEqualTo("Post Title");
         assertThat(post.getSlug()).isEqualTo("post-title");
         assertThat(post.getTeaser()).isEqualTo("POst resume");
