@@ -56,7 +56,19 @@ public class AuthorEntityTest {
     @Test
     public void shouldNotPersistAuthorWithoutFirstName() {
         Author author = new Author();
+        author.setFirstName(null);
         author.setLastName("Test");
+        author.setEmail("author.test@mail.com");
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
+    }
+
+    @Test
+    public void shouldNotPersistAuthorWithoutLastName() {
+        Author author = new Author();
+        author.setFirstName("Author");
+        author.setLastName(null);
         author.setEmail("author.test@mail.com");
 
         exception.expect(PersistenceException.class);
