@@ -261,7 +261,7 @@ public class PostEntityTest {
     }
 
     @Test
-    public void shouldNotPersistPostWithoutUpdatedAt() {
+    public void shouldPersistPostWithoutUpdatedAt() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
         Post post = new Post();
@@ -271,10 +271,8 @@ public class PostEntityTest {
         post.setTeaser("POst resume");
         post.setBody("Post content");
         post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(null);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
-        exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
     }
 
@@ -295,5 +293,22 @@ public class PostEntityTest {
         Post postPersisted = entityManager.persistFlushFind(post);
 
         assertThat(postPersisted.isStatus()).isTrue();
+    }
+
+    @Test
+    public void shouldPersistPostWithCreatedAtDefined() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle("Post Title");
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post content");
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        Post postPersisted = entityManager.persistFlushFind(post);
+
+        assertThat(postPersisted.getCreatedAt()).isNotNull();
     }
 }

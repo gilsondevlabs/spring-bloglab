@@ -31,9 +31,8 @@ public class Post {
     private String body;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     private boolean status = true;
