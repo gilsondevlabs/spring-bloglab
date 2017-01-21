@@ -157,4 +157,23 @@ public class PostEntityTest {
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
     }
+
+    @Test
+    public void shouldNotPersistPostWithSlugWithMore70Characters() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle("Post Title");
+        post.setSlug(dataFactory.getRandomChars(71));
+        post.setTeaser("POst resume");
+        post.setBody("Post Content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setStatus(true);
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(post);
+    }
 }
