@@ -32,6 +32,8 @@ public class Post {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
     private boolean status;
 

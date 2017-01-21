@@ -270,4 +270,23 @@ public class PostEntityTest {
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
     }
+
+    @Test
+    public void shouldNotPersistPostWithoutUpdatedAt() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle("Post Title");
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(null);
+        post.setStatus(true);
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(post);
+    }
 }
