@@ -35,7 +35,8 @@ public class Post {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-    private boolean status;
+
+    private boolean status = true;
 
     @ElementCollection
     private List<String> keywords;

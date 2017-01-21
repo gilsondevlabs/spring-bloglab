@@ -55,7 +55,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         assertThat(post.getId()).isEqualTo(1L);
@@ -82,7 +81,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         Post postPersisted = entityManager.persistFlushFind(post);
@@ -113,7 +111,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -132,7 +129,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -151,7 +147,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -170,7 +165,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -189,7 +183,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -208,7 +201,6 @@ public class PostEntityTest {
         post.setBody("Post Content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -227,7 +219,6 @@ public class PostEntityTest {
         post.setBody(null);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -246,7 +237,6 @@ public class PostEntityTest {
         post.setBody(dataFactory.getRandomChars(5001));
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         entityManager.persistFlushFind(post);
@@ -264,7 +254,6 @@ public class PostEntityTest {
         post.setBody("Post content");
         post.setCreatedAt(null);
         post.setUpdatedAt(LocalDateTime.now());
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
@@ -283,10 +272,28 @@ public class PostEntityTest {
         post.setBody("Post content");
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(null);
-        post.setStatus(true);
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
+    }
+
+    @Test
+    public void shouldPersistPostWithStatusActive() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle("Post Title");
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        Post postPersisted = entityManager.persistFlushFind(post);
+
+        assertThat(postPersisted.isStatus()).isTrue();
     }
 }
