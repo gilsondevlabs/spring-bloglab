@@ -101,4 +101,15 @@ public class AuthorEntityTest {
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
     }
+
+    @Test
+    public void shouldNotPersistAuthorWithLastNameWithMore50Characters() {
+        Author author = new Author();
+        author.setFirstName("Author");
+        author.setLastName(dataFactory.getRandomChars(51));
+        author.setEmail("author.test@mail.com");
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
+    }
 }
