@@ -17,6 +17,8 @@ public class Post {
 
     @ManyToOne
     private Author author;
+
+    @Column(nullable = false)
     private String title;
     private String slug;
     private String teaser;

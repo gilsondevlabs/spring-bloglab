@@ -1,7 +1,10 @@
 package in.gilsondev.blog.domain;
 
 import in.gilsondev.blog.builder.AuthorBuilder;
+import org.fluttercode.datafactory.impl.DataFactory;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -12,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -27,6 +31,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class PostEntityTest {
     @Autowired
     private TestEntityManager entityManager;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldHaveLombokProperties() {
@@ -90,5 +97,24 @@ public class PostEntityTest {
         assertThat(postPersisted.getUpdatedAt()).isEqualTo(post.getUpdatedAt());
         assertThat(postPersisted.isStatus()).isEqualTo(post.isStatus());
         assertThat(postPersisted.getKeywords()).containsAll(post.getKeywords());
+    }
+
+    @Test
+    public void shouldNotPersistPostWithoutTitle() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle(null);
+        post.setSlug("post-title");
+        post.setTeaser("POst resume");
+        post.setBody("Post Content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setStatus(true);
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        Post postPersisted = entityManager.persistFlushFind(post);
     }
 }
