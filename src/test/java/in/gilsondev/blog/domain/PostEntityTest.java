@@ -117,7 +117,7 @@ public class PostEntityTest {
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
-        Post postPersisted = entityManager.persistFlushFind(post);
+        entityManager.persistFlushFind(post);
     }
 
     @Test
@@ -136,6 +136,25 @@ public class PostEntityTest {
         post.setKeywords(Arrays.asList("Post", "Tags"));
 
         exception.expect(PersistenceException.class);
-        Post postPersisted = entityManager.persistFlushFind(post);
+        entityManager.persistFlushFind(post);
+    }
+
+    @Test
+    public void shouldNotPersistPostWithoutSlug() {
+        Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
+
+        Post post = new Post();
+        post.setAuthor(authorPersisted);
+        post.setTitle("Post Title");
+        post.setSlug(null);
+        post.setTeaser("POst resume");
+        post.setBody("Post Content");
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setStatus(true);
+        post.setKeywords(Arrays.asList("Post", "Tags"));
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(post);
     }
 }
