@@ -1,5 +1,6 @@
 package in.gilsondev.blog.domain;
 
+import org.fluttercode.datafactory.impl.DataFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,12 +23,10 @@ public class AuthorEntityTest {
     @Autowired
     private TestEntityManager entityManager;
 
+    private DataFactory dataFactory = new DataFactory();
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void setUp() {
-   }
 
     @Test
     public void shouldHaveLombokProperties() {
@@ -87,6 +86,17 @@ public class AuthorEntityTest {
         author.setFirstName("Author");
         author.setLastName("Test");
         author.setEmail(null);
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
+    }
+
+    @Test
+    public void shouldNotPersistAuthorWithFirstNameWithMore50Characters() {
+        Author author = new Author();
+        author.setFirstName(dataFactory.getRandomChars(51));
+        author.setLastName("Test");
+        author.setEmail("author.test@mail.com");
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
