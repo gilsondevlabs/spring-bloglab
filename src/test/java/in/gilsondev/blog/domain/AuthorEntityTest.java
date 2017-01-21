@@ -1,12 +1,16 @@
 package in.gilsondev.blog.domain;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.persistence.PersistenceException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AuthorEntityTest {
     @Autowired
     private TestEntityManager entityManager;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldHaveLombokProperties() {
@@ -44,5 +51,15 @@ public class AuthorEntityTest {
         assertThat(authorPersisted.getFirstName()).isEqualTo(author.getFirstName());
         assertThat(authorPersisted.getLastName()).isEqualTo(author.getLastName());
         assertThat(authorPersisted.getEmail()).isEqualTo(author.getEmail());
+    }
+
+    @Test
+    public void shouldNotPersistAuthorWithoutFirstName() {
+        Author author = new Author();
+        author.setLastName("Test");
+        author.setEmail("author.test@mail.com");
+
+        exception.expect(PersistenceException.class);
+        entityManager.persistFlushFind(author);
     }
 }
