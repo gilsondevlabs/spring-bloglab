@@ -1,7 +1,7 @@
 package in.gilsondev.blog.domain;
 
+import in.gilsondev.blog.builder.AuthorBuilder;
 import org.fluttercode.datafactory.impl.DataFactory;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,11 +31,12 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldHaveLombokProperties() {
-        Author author = new Author();
-        author.setId(1L);
-        author.setFirstName("Author");
-        author.setLastName("Test");
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(1L)
+                .withFirstName("Author")
+                .withLastName("Test")
+                .withEmail("author.test@mail.com")
+                .build();
 
         assertThat(author.getId()).isEqualTo(1L);
         assertThat(author.getFirstName()).isEqualTo("Author");
@@ -45,10 +46,9 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldPersistData() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName("Test");
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .build();
 
         Author authorPersisted = entityManager.persistFlushFind(author);
 
@@ -61,10 +61,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithoutFirstName() {
-        Author author = new Author();
-        author.setFirstName(null);
-        author.setLastName("Test");
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withFirstName(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -72,10 +72,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithoutLastName() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName(null);
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withLastName(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -83,10 +83,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithoutEmail() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName("Test");
-        author.setEmail(null);
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withEmail(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -94,10 +94,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithFirstNameWithMore50Characters() {
-        Author author = new Author();
-        author.setFirstName(dataFactory.getRandomChars(51));
-        author.setLastName("Test");
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withFirstName(dataFactory.getRandomChars(51))
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -105,10 +105,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithLastNameWithMore50Characters() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName(dataFactory.getRandomChars(51));
-        author.setEmail("author.test@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withLastName(dataFactory.getRandomChars(51))
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -116,10 +116,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithEmailWithMore60Characters() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName("Test");
-        author.setEmail(dataFactory.getRandomChars(60) + "@mail.com");
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withEmail(dataFactory.getRandomChars(60) + "@mail.com")
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(author);
@@ -127,10 +127,10 @@ public class AuthorEntityTest {
 
     @Test
     public void shouldNotPersistAuthorWithInvalidEmail() {
-        Author author = new Author();
-        author.setFirstName("Author");
-        author.setLastName("Test");
-        author.setEmail(dataFactory.getRandomChars(30));
+        Author author = new AuthorBuilder()
+                .withId(null)
+                .withEmail(dataFactory.getRandomChars(30))
+                .build();
 
         exception.expect(ConstraintViolationException.class);
         entityManager.persistFlushFind(author);
