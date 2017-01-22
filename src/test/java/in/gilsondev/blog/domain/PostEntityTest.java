@@ -1,6 +1,7 @@
 package in.gilsondev.blog.domain;
 
 import in.gilsondev.blog.builder.AuthorBuilder;
+import in.gilsondev.blog.builder.PostBuilder;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,16 +47,17 @@ public class PostEntityTest {
         LocalDateTime now = LocalDateTime.now();
         when(LocalDateTime.now()).thenReturn(now);
 
-        Post post = new Post();
-        post.setId(1L);
-        post.setAuthor(authorFake);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withId(1L)
+                .withAuthor(authorFake)
+                .withTitle("Post Title")
+                .withSlug("post-title")
+                .withTeaser("POst resume")
+                .withBody("Post Content")
+                .withCreatedAt(LocalDateTime.now())
+                .withUpdatedAt(LocalDateTime.now())
+                .withKeywords("Post", "Tags")
+                .build();
 
         assertThat(post.getId()).isEqualTo(1L);
         assertThat(post.getAuthor()).isEqualTo(authorFake);
@@ -73,16 +75,7 @@ public class PostEntityTest {
     public void shouldPersistData() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
-
+        Post post = new PostBuilder().withAuthor(authorPersisted).build();
         Post postPersisted = entityManager.persistFlushFind(post);
 
         assertThat(postPersisted.getId()).isNotNull();
@@ -103,15 +96,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithoutTitle() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle(null);
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withTitle(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -121,15 +109,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithTitleWithMore50Characters() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle(dataFactory.getRandomChars(51));
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withTitle(dataFactory.getRandomChars(51))
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -139,15 +122,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithoutSlug() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug(null);
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withSlug(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -157,15 +135,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithSlugWithMore70Characters() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug(dataFactory.getRandomChars(71));
-        post.setTeaser("POst resume");
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withSlug(dataFactory.getRandomChars(71))
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -175,15 +148,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithoutTeaser() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser(null);
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withTeaser(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -193,15 +161,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithTeaserWithMore70Characters() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser(dataFactory.getRandomChars(71));
-        post.setBody("Post Content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withTeaser(dataFactory.getRandomChars(71))
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -211,15 +174,10 @@ public class PostEntityTest {
     public void shouldNotPersistPostWithoutBody() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody(null);
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withBody(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -229,32 +187,26 @@ public class PostEntityTest {
     public void shouldPersistPostWithBodyWithMore5000Characters() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody(dataFactory.getRandomChars(5001));
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withBody(dataFactory.getRandomChars(5001))
+                .build();
 
-        entityManager.persistFlushFind(post);
+        Post postPersisted = entityManager.persistFlushFind(post);
+
+        assertThat(postPersisted.getId()).isNotNull();
+        assertThat(postPersisted.getId()).isNotNegative();
+        assertThat(postPersisted.getBody()).isNotNull();
     }
 
     @Test
     public void shouldNotPersistPostWithoutCreatedAt() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post content");
-        post.setCreatedAt(null);
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withCreatedAt(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
@@ -264,31 +216,26 @@ public class PostEntityTest {
     public void shouldPersistPostWithoutUpdatedAt() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .withUpdatedAt(null)
+                .build();
 
-        entityManager.persistFlushFind(post);
+        Post postPersisted = entityManager.persistFlushFind(post);
+
+        assertThat(postPersisted.getId()).isNotNull();
+        assertThat(postPersisted.getId()).isNotNegative();
+        assertThat(postPersisted.getUpdatedAt()).isNull();
+
     }
 
     @Test
     public void shouldPersistPostWithStatusActive() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post content");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .build();
 
         Post postPersisted = entityManager.persistFlushFind(post);
 
@@ -299,13 +246,9 @@ public class PostEntityTest {
     public void shouldPersistPostWithCreatedAtDefined() {
         Author authorPersisted = entityManager.persistFlushFind(new AuthorBuilder().withId(null).build());
 
-        Post post = new Post();
-        post.setAuthor(authorPersisted);
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post content");
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(authorPersisted)
+                .build();
 
         Post postPersisted = entityManager.persistFlushFind(post);
 
@@ -314,12 +257,9 @@ public class PostEntityTest {
 
     @Test
     public void shouldNotPersistPostWithoutAuthor() {
-        Post post = new Post();
-        post.setTitle("Post Title");
-        post.setSlug("post-title");
-        post.setTeaser("POst resume");
-        post.setBody("Post content");
-        post.setKeywords(Arrays.asList("Post", "Tags"));
+        Post post = new PostBuilder()
+                .withAuthor(null)
+                .build();
 
         exception.expect(PersistenceException.class);
         entityManager.persistFlushFind(post);
