@@ -11,6 +11,7 @@ public class PostBuilder {
 
     public PostBuilder() {
         this.post = new Post();
+        this.post.setId(1L);
         this.post.setAuthor(new AuthorBuilder().build());
         this.post.setTitle("Post Title");
         this.post.setSlug("post-title");
@@ -21,7 +22,7 @@ public class PostBuilder {
         this.post.setKeywords(Arrays.asList("Post", "Tags"));
     }
 
-    public PostBuilder withId(long id) {
+    public PostBuilder withId(Long id) {
         this.post.setId(id);
         return this;
     }
